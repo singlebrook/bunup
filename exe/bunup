@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'bunup'
+::Bunup::CLI.new(ARGV).run

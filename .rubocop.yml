@@ -1,0 +1,78 @@
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Layout/ClosingHeredocIndentation:
+  Enabled: false
+
+# A method chain with a trailing dot is able to be copy-and-pasted into a
+# console
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: false
+
+# This cop has a bug in 0.52.0
+# https://github.com/bbatsov/rubocop/issues/5224
+Layout/EmptyLinesAroundArguments:
+  Enabled: false
+
+Layout/IndentHeredoc:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Metrics/AbcSize:
+  Exclude:
+    - spec/support/helpers.rb
+
+# Compared to metrics like `AbcSize` or `CyclomaticComplexity`, the number of
+# lines in a method is not a useful metric. It's common to have very long
+# methods (> 50 lines) which are quite simple. For example, a method that
+# returns a long string with only a few interpolations.
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+# Status codes or symbols are fine
+Rails/HttpStatus:
+  Enabled: false
+
+# Too subtle to lint. Recommend semantic style, but avoid `end.x`.
+Style/BlockDelimiters:
+  Enabled: false
+
+# Adding annotations to short format strings would make them less readable.
+Style/FormatStringToken:
+  Enabled: false
+
+# Too complicated for a linter. Should be up to the developer at implementation
+# time.
+Style/GuardClause:
+  Enabled: false
+
+# Too subtle to lint. Avoid the "modifier" (postfix) style except on extremely
+# short and simple lines.
+Style/IfUnlessModifier:
+  Enabled: false

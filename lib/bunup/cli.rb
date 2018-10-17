@@ -11,14 +11,9 @@ module Bunup
         'Continue? [y/N] '.freeze
     UPDATING_MSG_FMT = '(%<remaining>s) Updating %<gem_name>s ' \
       '%<installed_version>s -> %<newest_version>s'.freeze
-    USAGE = <<-TEXT.freeze
-Usage:
-  bunup --all
-  bunup <gem_name> [<gem_name>...]
-TEXT
 
     def initialize(args)
-      abort(USAGE) if args.include?('-h') || args.include?('--help')
+      @options = ::Bunup::Options.parse!(args)
       @args = args
       @exit_status = true
     end
@@ -58,7 +53,7 @@ TEXT
     end
 
     def bunup_all?
-      @args.include?('--all') || @args.empty?
+      @options.all
     end
 
     def bunup_many?

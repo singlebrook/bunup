@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/singlebrook/bunup.svg?branch=master)](https://travis-ci.org/singlebrook/bunup)
+
 # Bunup
 
 Update Gemfile dependencies and commit to git with one command.

@@ -3,8 +3,16 @@ require 'open3'
 module Bunup
   # Run bundler commands
   class Bundler
+    # Expects:
+    #   "rails (newest 5.2.1, installed 5.2.0)"
+    #   or
+    #   "rails (newest 5.2.1, installed 5.2.0, requested = 5.2.0)"
     OUTDATED_PATTERN = /
-      (?<name>.*)\s\(newest\s(?<newest>.*),\sinstalled\s(?<installed>.*)\)
+      (?<name>.*)\s
+      \(newest\s(?<newest>.*),\s
+      installed\s(?<installed>.*?)
+      (,\srequested.*)?
+      \)
     /x
 
     # Expected output format:

@@ -50,6 +50,25 @@ module Bunup
         and include('(1/1) Updating gem_name 1.0.0 -> 1.1.0')
     end
 
+    describe '#build_gems' do
+      it 'builds gems from bundler output' do
+        cli = described_class.new([])
+        expect(cli).
+          to receive(:bundle_outdated).
+          and_return(
+            "rails (newest 5.2.1, installed 5.2.0, requested ~> 5.2.0)\n" \
+              'rails (newest 5.2.1, installed 5.2.0)'
+          )
+        built_gems = []
+        expect { built_gems = cli.send(:build_gems) }.not_to raise_error
+        built_gems.each do |gem|
+          expect(gem.name).to eq('rails')
+          expect(gem.installed_version).to eq('5.2.0')
+          expect(gem.newest_version).to eq('5.2.1')
+        end
+      end
+    end
+
     describe '#handle_system_exit' do
       it 'prints the error message' do
         msg = 'Exception message'

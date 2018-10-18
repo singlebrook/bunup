@@ -16,6 +16,12 @@ module Bunup
           options.all = true
         end
 
+        assume_yes_msg = 'Answer "yes" to major version update prompts ' \
+          'and run non-interactively'
+        opts.on('-y', '--yes', '--assume-yes', assume_yes_msg) do
+          options.assume_yes = true
+        end
+
         opts.on('-h', '--help', 'Prints this help') do
           puts opts
           exit

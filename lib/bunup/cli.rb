@@ -5,9 +5,9 @@ module Bunup
     E_DIRTY_GEMFILE = 'Gemfile and/or Gemfile.lock has changes that would ' \
         'be overwritten. Please stash or commit your changes before running ' \
         'bunup.'.freeze
-    MAJOR_VERSION_UPGRADE_WARNING_FMT = 'WARNING: %<gem_name>s is being ' \
-        'upgraded from %<installed_version>s to %<newest_version>s. This is ' \
-        'a major version upgrade with possible breaking changes. ' \
+    MAJOR_VERSION_UPDATE_WARNING_FMT = 'WARNING: %<gem_name>s is being ' \
+        'updated from %<installed_version>s to %<newest_version>s. This is ' \
+        'a major version update with possible breaking changes. ' \
         'Continue? [y/N] '.freeze
     UPDATING_MSG_FMT = '(%<remaining>s) Updating %<gem_name>s ' \
       '%<installed_version>s -> %<newest_version>s'.freeze
@@ -75,7 +75,7 @@ module Bunup
       raise exception unless bunup_many?
     end
 
-    def major_version_upgrade?
+    def major_version_update?
       return false if @gem.newest_version.nil? || @gem.installed_version.nil?
 
       major_version = ->(version) { version.split('.')[0].to_i }
@@ -83,12 +83,12 @@ module Bunup
         major_version.call(@gem.installed_version)
     end
 
-    # A major version upgrade has breaking changes, according to Semantic
+    # A major version update has breaking changes, according to Semantic
     # Versioning (https://semver.org/spec/v2.0.0.html). Let's make sure the
     # user is aware of that.
-    def prompt_for_major_upgrade
+    def prompt_for_major_update
       print format(
-        MAJOR_VERSION_UPGRADE_WARNING_FMT,
+        MAJOR_VERSION_UPDATE_WARNING_FMT,
         gem_name: @gem.name,
         installed_version: @gem.installed_version,
         newest_version: @gem.newest_version
@@ -114,7 +114,7 @@ module Bunup
     def update_and_commit_changes
       @gems.each do |gem|
         @gem = gem
-        prompt_for_major_upgrade if major_version_upgrade?
+        prompt_for_major_update if major_version_update?
         update
         commit
       end

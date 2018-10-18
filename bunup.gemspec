@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ['Shane Cavanaugh']
   spec.email = ['shane@shanecav.net']
 
-  spec.summary = 'Bundle upgrade and commit to git with one command'
+  spec.summary = 'Bundle update and commit to git with one command'
   spec.license = 'MIT'
 
   # Specify which files should be added to the gem when it is released.

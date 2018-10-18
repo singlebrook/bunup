@@ -82,8 +82,8 @@ module Bunup
       end
     end
 
-    describe '#prompt_for_major_upgrade' do
-      it 'it exits if user does not want to upgrade major version' do
+    describe '#prompt_for_major_update' do
+      it 'it exits if user does not want to update major version' do
         gem_name = 'gem_name'
         installed_version = '1.0.0'
         newest_version = '2.0.0'

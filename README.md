@@ -23,6 +23,12 @@ Or install it yourself as:
 
 ## Usage
 
+### Bunup all gems
+
+```bash
+bunup
+```
+
 ### Bunup a single gem
 
 ```bash
@@ -35,11 +41,10 @@ bunup rake
 bunup rake rubocop
 ```
 
-### Bunup all gems
+### Options
 
-```bash
-bunup --all
-```
+* `--all`: Update all outdated gems. This is the default.
+* `-y` `--yes` `--assume-yes`: Answer "yes" to major version update prompts and run non-interactively
 
 ## Development
 

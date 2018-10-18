@@ -102,6 +102,31 @@ module Bunup
           to raise_error(::SystemExit).
           with_message('No update performed')
       end
+
+      it 'does not exit when assuming yes' do
+        installed_version = '1.0.0'
+        newest_version = '2.0.0'
+
+        gem_stub1 = instance_double(
+          '::Bunup::Gem',
+          name: 'some_gem1',
+          installed_version: installed_version,
+          newest_version: newest_version
+        )
+        gem_stub2 = instance_double(
+          '::Bunup::Gem',
+          name: 'some_gem2',
+          installed_version: installed_version,
+          newest_version: newest_version
+        )
+        allow(STDIN).to receive(:gets).and_return('n')
+
+        cli = described_class.new(%w[some_gem1 some_gem2 -y])
+        allow(cli).to receive(:build_gems).and_return([gem_stub1, gem_stub2])
+        expect { cli.run }.
+          to raise_error(::SystemExit).
+          with_message('exit')
+      end
     end
   end
 end

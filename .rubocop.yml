@@ -37,7 +37,7 @@ Layout/EndAlignment:
 
 Metrics/AbcSize:
   Exclude:
-    - spec/support/helpers.rb
+    - lib/bunup/options.rb
 
 # Compared to metrics like `AbcSize` or `CyclomaticComplexity`, the number of
 # lines in a method is not a useful metric. It's common to have very long

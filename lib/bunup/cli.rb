@@ -93,8 +93,12 @@ module Bunup
         installed_version: @gem.installed_version,
         newest_version: @gem.newest_version
       )
-      unless STDIN.gets.chomp.casecmp('y').zero?
-        raise ::SystemExit.new(true, 'No update performed')
+      if @options.assume_yes
+        print "assuming yes\n"
+      else
+        unless STDIN.gets.chomp.casecmp('y').zero?
+          raise ::SystemExit.new(true, 'No update performed')
+        end
       end
     end
 

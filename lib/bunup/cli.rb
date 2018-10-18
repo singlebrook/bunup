@@ -62,8 +62,6 @@ module Bunup
 
     def commit
       Services::Commiter.new(@gem).perform
-    rescue ::SystemExit => e
-      handle_system_exit(e)
     end
 
     def handle_system_exit(exception)
@@ -111,16 +109,19 @@ module Bunup
         newest_version: @gem.newest_version
       )
       Services::Updater.new(@gem).perform
-    rescue ::SystemExit => e
-      handle_system_exit(e)
     end
 
     def update_and_commit_changes
       @gems.each do |gem|
         @gem = gem
-        prompt_for_major_update if major_version_update?
-        update
-        commit
+        begin
+          prompt_for_major_update if major_version_update?
+          update
+          commit
+        rescue ::SystemExit => e
+          handle_system_exit(e)
+          next
+        end
       end
     end
 

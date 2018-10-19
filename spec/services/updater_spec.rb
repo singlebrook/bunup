@@ -13,7 +13,8 @@ module Bunup
         expect { updater.perform }.
           to raise_error(::SystemExit).
           with_message(
-            "Bundler tried to update #{gem_name} but is version stayed the same"
+            "Bundler tried to update #{gem_name} " \
+            'but its version stayed the same'
           )
       end
     end

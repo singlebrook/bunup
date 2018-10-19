@@ -26,7 +26,7 @@ module Bunup
           raise ::SystemExit.new(
             false,
             "Bundler tried to update #{@gem.name} " \
-              'but is version stayed the same'
+              'but its version stayed the same'
           )
         end
       end

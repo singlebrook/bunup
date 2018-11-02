@@ -5,9 +5,8 @@ require 'bunup/version'
 Gem::Specification.new do |spec|
   spec.name = 'bunup'
   spec.version = Bunup::VERSION
-  spec.authors = ['Shane Cavanaugh']
-  spec.email = ['shane@shanecav.net']
-
+  spec.authors = ['Jared Beck', 'Shane Cavanaugh', 'Leon Miller-Out']
+  spec.email = %w[jared@jaredbeck.com shane@shanecav.net leon@singlebrook.com]
   spec.summary = 'Bundle update and commit to git with one command'
   spec.license = 'MIT'
 

@@ -1,5 +1,6 @@
 
 [![Build Status](https://travis-ci.org/singlebrook/bunup.svg?branch=master)](https://travis-ci.org/singlebrook/bunup)
+![Gem](https://img.shields.io/gem/v/bunup.svg)
 
 # Bunup
 

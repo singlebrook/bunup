@@ -19,7 +19,7 @@ module Bunup
     end
 
     def run
-      verify_clean_gemfile
+      abort(E_DIRTY_GEMFILE) unless ::Bunup::Services::Commiter.clean_gemfile?
       @gems = build_gems
       update_and_commit_changes
       exit @exit_status
@@ -123,14 +123,6 @@ module Bunup
           next
         end
       end
-    end
-
-    def verify_clean_gemfile
-      unless ::Bunup::Services::Commiter.clean_gemfile?
-        raise ::SystemExit.new(false, E_DIRTY_GEMFILE)
-      end
-    rescue ::SystemExit => e
-      handle_system_exit(e)
     end
   end
 end

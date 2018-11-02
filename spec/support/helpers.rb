@@ -11,4 +11,16 @@ module Helpers
   ensure
     $stdout = original_stdout
   end
+
+  def capture_standard_error
+    error = []
+    original_stderr = $stderr
+    $stderr = mock_stderr = ::StringIO.new
+    mock_stderr.set_encoding('UTF-8')
+    yield
+  rescue ::SystemExit
+    error << mock_stderr.string.chomp
+  ensure
+    $stderr = original_stderr
+  end
 end

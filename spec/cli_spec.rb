@@ -42,12 +42,20 @@ module Bunup
         and_return(updater_stub)
       expect(updater_stub).to receive(:perform)
 
-      expect(cli).to receive(:verify_clean_gemfile)
-
       output = capture_standard_output { cli.run }
       expect(output.join).
         to include('Checking for updates').
         and include('(1/1) Updating gem_name 1.0.0 -> 1.1.0')
+    end
+
+    it 'aborts if Gemfile is dirty' do
+      expect(::Bunup::Services::Commiter).
+        to receive(:clean_gemfile?).
+        and_return(false)
+
+      output = capture_standard_error { described_class.new(['gem_name']).run }
+      expect(output.join).
+        to include(described_class::E_DIRTY_GEMFILE)
     end
 
     describe '#build_gems' do

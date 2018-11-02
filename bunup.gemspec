@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.version = Bunup::VERSION
   spec.authors = ['Jared Beck', 'Shane Cavanaugh', 'Leon Miller-Out']
   spec.email = %w[jared@jaredbeck.com shane@shanecav.net leon@singlebrook.com]
+  spec.homepage = 'https://github.com/singlebrook/bunup'
   spec.summary = 'Bundle update and commit to git with one command'
   spec.license = 'MIT'
 

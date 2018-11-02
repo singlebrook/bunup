@@ -8,7 +8,7 @@ module Bunup
     SPECIAL_CHARACTERS = '.-_'.freeze
     ALLOWED_CHARACTERS = '[A-Za-z0-9' \
       "#{Regexp.escape(SPECIAL_CHARACTERS)}]+".freeze
-    NAME_PATTERN = /\A#{ALLOWED_CHARACTERS}\Z/
+    NAME_PATTERN = /\A#{ALLOWED_CHARACTERS}\Z/.freeze
 
     attr_accessor :name, :installed_version, :newest_version
 

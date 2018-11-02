@@ -13,7 +13,7 @@ module Bunup
       installed\s(?<installed>.*?)
       (,\srequested.*)?
       \)
-    /x
+    /x.freeze
 
     # Expected output format:
     #   "\ngem-name (newest 1.0.0, installed 2.0.0)\n"

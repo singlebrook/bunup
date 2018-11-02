@@ -2,7 +2,7 @@ module Bunup
   module Services
     # Use bundler to update the gem and the Gemfile
     class Updater
-      USING_PATTERN = /^Using (?<gem_name>.*) (?<installed>.*)$/
+      USING_PATTERN = /^Using (?<gem_name>.*) (?<installed>.*)$/.freeze
 
       def initialize(gem)
         @gem = gem

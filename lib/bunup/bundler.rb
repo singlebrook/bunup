@@ -14,12 +14,14 @@ module Bunup
       (,\srequested.*)?
       \)
     /x.freeze
+    # Expects: "Bundler version 1.17.0"
+    VERSION_PATTERN = /Bundler version (?<version>(\d|\.)*)/.freeze
 
     # Expected output format:
     #   "\ngem-name (newest 1.0.0, installed 2.0.0)\n"
-    def self.outdated(gem_names)
+    def self.outdated(gem_names, args = [])
       stdout, stderr, status = Open3.capture3(
-        "bundler outdated #{gem_names.join(' ')} --parseable --strict"
+        "bundler outdated #{gem_names.join(' ')} #{args.join(' ')} --parseable --strict"
       )
       validate_output(stdout, stderr, status)
       stdout.strip
@@ -38,6 +40,14 @@ module Bunup
           (stderr == '' ? stdout : stderr).chomp + "\n"
         )
       end
+    end
+
+    def self.version
+      bundler_version = `bundler --version`
+      match_data = bundler_version.match(VERSION_PATTERN)
+      raise 'Unexpected Bundler version format' if match_data.nil?
+
+      ::Gem::Version.new(match_data[:version])
     end
   end
 end

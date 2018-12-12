@@ -2,6 +2,12 @@ require 'optionparser'
 require 'ostruct'
 
 module Bunup
+  attr_reader :options
+
+  def self.options=(opts)
+    @options ||= opts
+  end
+
   # Handle command-line switches
   class Options < ::OpenStruct
     def self.parse!(args)
@@ -28,7 +34,7 @@ module Bunup
         end
       end
       opt_parser.parse!(args)
-      options
+      ::Bunup.options = options
     rescue OptionParser::InvalidOption => e
       puts e
       puts opt_parser

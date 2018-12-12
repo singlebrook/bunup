@@ -5,10 +5,6 @@ module Bunup
     E_DIRTY_GEMFILE = 'Gemfile and/or Gemfile.lock has changes that would ' \
         'be overwritten. Please stash or commit your changes before running ' \
         'bunup.'.freeze
-    MAJOR_VERSION_UPDATE_WARNING_FMT = 'WARNING: %<gem_name>s is being ' \
-        'updated from %<installed_version>s to %<newest_version>s. This is ' \
-        'a major version update with possible breaking changes. ' \
-        'Continue? [y/N] '.freeze
     UPDATING_MSG_FMT = '(%<remaining>s) Updating %<gem_name>s ' \
       '%<installed_version>s -> %<newest_version>s'.freeze
 
@@ -20,33 +16,28 @@ module Bunup
 
     def run
       abort(E_DIRTY_GEMFILE) unless ::Bunup::Services::Commiter.clean_gemfile?
-      @gems = build_gems
-      update_and_commit_changes
+      if Bundler.version < ::Gem::Version.new('1.17')
+        gems = build_gems(only_explicit: false)
+        update_and_commit_changes(gems)
+      else
+        puts '== Updating explicit dependencies =='
+        explicit_gems = build_gems(only_explicit: true)
+        update_and_commit_changes(explicit_gems)
+
+        puts '== Updating transistive dependencies =='
+        transitive_gems = build_gems(only_explicit: false)
+        update_and_commit_changes(transitive_gems)
+      end
       exit @exit_status
     end
 
     private
 
-    def build_gem(match_data)
-      ::Bunup::Gem.new(
-        name: match_data[:name],
-        installed_version: match_data[:installed],
-        newest_version: match_data[:newest]
-      )
-    end
-
-    def build_gems
-      bundle_outdated.split("\n").map do |line|
-        next unless Bundler::OUTDATED_PATTERN =~ line
-
-        match_data = Bundler::OUTDATED_PATTERN.match(line)
-        build_gem(match_data)
-      end.compact
-    end
-
-    def bundle_outdated
-      puts 'Checking for updates'
-      Bundler.outdated(bunup_all? ? [] : @args)
+    def build_gems(only_explicit:)
+      Services::GemsBuilder.new(
+        bunup_all? ? [] : @args,
+        only_explicit: only_explicit
+      ).perform
     rescue ::SystemExit => e
       handle_system_exit(e)
       ''
@@ -60,10 +51,6 @@ module Bunup
       @args.count > 1 || bunup_all?
     end
 
-    def commit
-      Services::Commiter.new(@gem).perform
-    end
-
     def handle_system_exit(exception)
       @exit_status = exception.success?
       msg = []
@@ -73,51 +60,21 @@ module Bunup
       raise exception unless bunup_many?
     end
 
-    def major_version_update?
-      return false if @gem.newest_version.nil? || @gem.installed_version.nil?
-
-      major_version = ->(version) { version.split('.')[0].to_i }
-      major_version.call(@gem.newest_version) >
-        major_version.call(@gem.installed_version)
-    end
-
-    # A major version update has breaking changes, according to Semantic
-    # Versioning (https://semver.org/spec/v2.0.0.html). Let's make sure the
-    # user is aware of that.
-    def prompt_for_major_update
-      print format(
-        MAJOR_VERSION_UPDATE_WARNING_FMT,
-        gem_name: @gem.name,
-        installed_version: @gem.installed_version,
-        newest_version: @gem.newest_version
-      )
-      if @options.assume_yes
-        print "assuming yes\n"
-      else
-        unless STDIN.gets.chomp.casecmp('y').zero?
-          raise ::SystemExit.new(true, 'No update performed')
-        end
-      end
-    end
-
-    def update
-      puts format(
-        UPDATING_MSG_FMT,
-        remaining: "#{@gems.find_index(@gem) + 1}/#{@gems.count}",
-        gem_name: @gem.name,
-        installed_version: @gem.installed_version,
-        newest_version: @gem.newest_version
-      )
-      Services::Updater.new(@gem).perform
-    end
-
-    def update_and_commit_changes
-      @gems.each do |gem|
-        @gem = gem
+    def update_and_commit_changes(gems)
+      gems.each do |gem|
         begin
-          prompt_for_major_update if major_version_update?
-          update
-          commit
+          Services::ConfirmMajorVersionUpdate.new(gem).perform
+
+          puts format(
+            UPDATING_MSG_FMT,
+            remaining: "#{gems.find_index(gem) + 1}/#{gems.count}",
+            gem_name: gem.name,
+            installed_version: gem.installed_version,
+            newest_version: gem.newest_version
+          )
+          Services::Updater.new(gem).perform
+
+          Services::Commiter.new(gem).perform
         rescue ::SystemExit => e
           handle_system_exit(e)
           next

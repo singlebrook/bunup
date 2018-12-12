@@ -21,6 +21,14 @@ module Bunup
 
     private
 
+    def valid_name?
+      name =~ NAME_PATTERN
+    end
+
+    def valid_version?(version_string)
+      ::Gem::Version.correct?(version_string)
+    end
+
     def validate
       abort "Invalid gem name: #{name}" unless valid_name?
       unless valid_version?(installed_version)
@@ -29,14 +37,6 @@ module Bunup
       unless valid_version?(newest_version)
         abort "Invalid version for #{name}: #{newest_version}"
       end
-    end
-
-    def valid_name?
-      name =~ NAME_PATTERN
-    end
-
-    def valid_version?(version_string)
-      ::Gem::Version.correct?(version_string)
     end
   end
 end

@@ -36,12 +36,12 @@ module Bunup
     end
 
     def build_gems
-      bundle_outdated.split("\n").map do |line|
+      bundle_outdated.split("\n").map.with_object([]) do |line, gems|
         next unless Bundler::OUTDATED_PATTERN =~ line
 
         match_data = Bundler::OUTDATED_PATTERN.match(line)
-        build_gem(match_data)
-      end.compact
+        gems << build_gem(match_data)
+      end
     end
 
     def bundle_outdated

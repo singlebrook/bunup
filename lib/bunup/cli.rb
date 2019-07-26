@@ -93,7 +93,7 @@ module Bunup
         installed_version: @gem.installed_version,
         newest_version: @gem.newest_version
       )
-      if @options.assume_yes
+      if @options[:assume_yes_for_git_update]
         print "assuming yes\n"
       else
         unless STDIN.gets.chomp.casecmp('y').zero?
@@ -112,7 +112,7 @@ module Bunup
         installed_version: @gem.installed_version,
         newest_version: @gem.newest_version
       )
-      if @options.assume_yes
+      if @options[:assume_yes_for_major_version_update]
         print "assuming yes\n"
       else
         unless STDIN.gets.chomp.casecmp('y').zero?

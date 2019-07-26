@@ -45,7 +45,7 @@ bunup rake rubocop
 ### Options
 
 * `--all`: Update all outdated gems. This is the default.
-* `-y` `--yes` `--assume-yes`: Answer "yes" to major version update prompts and run non-interactively
+* `-y` `--yes` `--assume-yes [major, git]`: Answer "yes" to major version or git version update prompts and run non-interactively. Defaults to all.
 
 ## Development
 

@@ -16,10 +16,25 @@ module Bunup
           options.all = true
         end
 
-        assume_yes_msg = 'Answer "yes" to major version update prompts ' \
-          'and run non-interactively'
-        opts.on('-y', '--yes', '--assume-yes', assume_yes_msg) do
-          options.assume_yes = true
+        assume_yes_msg = 'Answer "yes" to all major or git version update ' \
+          'prompts, or all, and run non-interactively. Defaults to all.'
+        opts.on(
+          '-y', '--yes', '--assume-yes [major, git]',
+          Array,
+          assume_yes_msg
+        ) do |list|
+          if list.nil?
+            options[:assume_yes_for_major_version_update] = true
+            options[:assume_yes_for_git_update] = true
+          else
+            list.each do |version_type|
+              case version_type.strip
+              when 'major'
+                then options[:assume_yes_for_major_version_update] = true
+              when 'git' then options[:assume_yes_for_git_update] = true
+              end
+            end
+          end
         end
 
         opts.on('-h', '--help', 'Prints this help') do

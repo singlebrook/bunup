@@ -5,6 +5,10 @@ module Bunup
     E_DIRTY_GEMFILE = 'Gemfile and/or Gemfile.lock has changes that would ' \
         'be overwritten. Please stash or commit your changes before running ' \
         'bunup.'.freeze
+    GIT_REF_UPDATE_WARNING = 'WARNING: %<gem_name>s is installed from a git ' \
+        'repo and is being updated from %<installed_version>s to ' \
+        '%<newest_version>s. This update could include breaking changes. ' \
+        'Continue? [y/N] '.freeze
     MAJOR_VERSION_UPDATE_WARNING_FMT = 'WARNING: %<gem_name>s is being ' \
         'updated from %<installed_version>s to %<newest_version>s. This is ' \
         'a major version update with possible breaking changes. ' \
@@ -76,9 +80,33 @@ module Bunup
     def major_version_update?
       return false if @gem.newest_version.nil? || @gem.installed_version.nil?
 
-      major_version = ->(version) { version.split('.')[0].to_i }
+      if @gem.installed_from_git?
+        major_version = ->(version) { version.split(' ')[0].split('.')[0].to_i }
+      else
+        major_version = ->(version) { version.split('.')[0].to_i }
+      end
+
       major_version.call(@gem.newest_version) >
         major_version.call(@gem.installed_version)
+    end
+
+    # A major version update has breaking changes, according to Semantic
+    # Versioning (https://semver.org/spec/v2.0.0.html). Let's make sure the
+    # user is aware of that.
+    def prompt_for_git_ref_update
+      print format(
+        GIT_REF_UPDATE_WARNING,
+        gem_name: @gem.name,
+        installed_version: @gem.installed_version,
+        newest_version: @gem.newest_version
+      )
+      if @options.assume_yes
+        print "assuming yes\n"
+      else
+        unless STDIN.gets.chomp.casecmp('y').zero?
+          raise ::SystemExit.new(true, 'No update performed')
+        end
+      end
     end
 
     # A major version update has breaking changes, according to Semantic
@@ -116,6 +144,7 @@ module Bunup
         @gem = gem
         begin
           prompt_for_major_update if major_version_update?
+          prompt_for_git_ref_update if @gem.installed_from_git?
           update
           commit
         rescue ::SystemExit => e

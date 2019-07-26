@@ -11,6 +11,7 @@ module Bunup
       gem_stub = instance_double(
         '::Bunup::Services::Gem',
         name: gem_name,
+        installed_from_git?: false,
         installed_version: installed_version,
         newest_version: newest_version
       )
@@ -99,6 +100,7 @@ module Bunup
         gem_stub = instance_double(
           '::Bunup::Gem',
           name: gem_name,
+          installed_from_git?: false,
           installed_version: installed_version,
           newest_version: newest_version
         )
@@ -108,7 +110,28 @@ module Bunup
         allow(cli).to receive(:build_gems).and_return([gem_stub])
         expect { cli.run }.
           to raise_error(::SystemExit).
-          with_message('No update performed')
+            with_message('No update performed')
+      end
+
+      it 'it handles major version updates for gems installed using git' do
+        gem_name = 'gem_name'
+        installed_version = '1.0.0 d021ade'
+        newest_version = '2.0.0 b6f1d19'
+
+        gem_stub = instance_double(
+          '::Bunup::Gem',
+          name: gem_name,
+          installed_from_git?: true,
+          installed_version: installed_version,
+          newest_version: newest_version
+        )
+        allow(STDIN).to receive(:gets).and_return('n')
+
+        cli = described_class.new(['some_gem'])
+        allow(cli).to receive(:build_gems).and_return([gem_stub])
+        expect { cli.run }.
+          to raise_error(::SystemExit).
+            with_message('No update performed')
       end
 
       it 'does not exit when assuming yes' do
@@ -118,12 +141,14 @@ module Bunup
         gem_stub1 = instance_double(
           '::Bunup::Gem',
           name: 'some_gem1',
+          installed_from_git?: false,
           installed_version: installed_version,
           newest_version: newest_version
         )
         gem_stub2 = instance_double(
           '::Bunup::Gem',
           name: 'some_gem2',
+          installed_from_git?: false,
           installed_version: installed_version,
           newest_version: newest_version
         )
@@ -133,7 +158,57 @@ module Bunup
         allow(cli).to receive(:build_gems).and_return([gem_stub1, gem_stub2])
         expect { cli.run }.
           to raise_error(::SystemExit).
-          with_message('exit')
+            with_message('exit')
+      end
+    end
+
+    describe '#prompt_for_git_ref_update' do
+      it 'it exits if user does not want to update major version' do
+        gem_name = 'gem_name'
+        installed_version = '6.0.0.rc1 d021ade'
+        newest_version = '6.0.0.rc2 b6f1d19'
+
+        gem_stub = instance_double(
+          '::Bunup::Gem',
+          name: gem_name,
+          installed_from_git?: true,
+          installed_version: installed_version,
+          newest_version: newest_version
+        )
+        allow(STDIN).to receive(:gets).and_return('n')
+
+        cli = described_class.new(['some_gem'])
+        allow(cli).to receive(:build_gems).and_return([gem_stub])
+        expect { cli.run }.
+          to raise_error(::SystemExit).
+            with_message('No update performed')
+      end
+
+      it 'does not exit when assuming yes' do
+        installed_version = '6.0.0.rc1 d021ade'
+        newest_version = '6.0.0.rc2 b6f1d19'
+
+        gem_stub1 = instance_double(
+          '::Bunup::Gem',
+          name: 'some_gem1',
+          installed_from_git?: true,
+          installed_version: installed_version,
+          newest_version: newest_version
+        )
+        gem_stub2 = instance_double(
+          '::Bunup::Gem',
+          name: 'some_gem2',
+          installed_from_git?: true,
+          installed_version: installed_version,
+          newest_version: newest_version
+        )
+        allow(STDIN).to receive(:gets).and_return('n')
+
+        cli = described_class.new(%w[some_gem1 some_gem2 -y])
+        allow(cli).to receive(:build_gems).and_return([gem_stub1, gem_stub2])
+        expect { cli.run }.
+          to raise_error(::SystemExit).
+            with_message('exit')
       end
     end
   end

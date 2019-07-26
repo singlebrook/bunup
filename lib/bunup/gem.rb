@@ -19,6 +19,11 @@ module Bunup
       validate
     end
 
+    def installed_from_git?
+      Services::ValidateGitVersion.new(@installed_version).perform ||
+        Services::ValidateGitVersion.new(@newest_version).perform
+    end
+
     private
 
     def validate

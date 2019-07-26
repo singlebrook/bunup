@@ -80,14 +80,7 @@ module Bunup
     def major_version_update?
       return false if @gem.newest_version.nil? || @gem.installed_version.nil?
 
-      if @gem.installed_from_git?
-        major_version = ->(version) { version.split(' ')[0].split('.')[0].to_i }
-      else
-        major_version = ->(version) { version.split('.')[0].to_i }
-      end
-
-      major_version.call(@gem.newest_version) >
-        major_version.call(@gem.installed_version)
+      @gem.newest_version.major > @gem.installed_version.major
     end
 
     # A major version update has breaking changes, according to Semantic

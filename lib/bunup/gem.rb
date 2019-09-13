@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 
 module Bunup
@@ -5,9 +7,9 @@ module Bunup
   class Gem
     # Gem name patterns taken from
     # https://github.com/rubygems/rubygems.org/blob/master/lib/patterns.rb
-    SPECIAL_CHARACTERS = '.-_'.freeze
+    SPECIAL_CHARACTERS = '.-_'
     ALLOWED_CHARACTERS = '[A-Za-z0-9' \
-      "#{Regexp.escape(SPECIAL_CHARACTERS)}]+".freeze
+      "#{Regexp.escape(SPECIAL_CHARACTERS)}]+"
     NAME_PATTERN = /\A#{ALLOWED_CHARACTERS}\Z/.freeze
 
     attr_accessor :name, :installed_version, :newest_version

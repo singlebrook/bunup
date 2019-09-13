@@ -55,10 +55,6 @@ Metrics/ClassLength:
 Metrics/ModuleLength:
   Enabled: false
 
-# Status codes or symbols are fine
-Rails/HttpStatus:
-  Enabled: false
-
 # Too subtle to lint. Recommend semantic style, but avoid `end.x`.
 Style/BlockDelimiters:
   Enabled: false

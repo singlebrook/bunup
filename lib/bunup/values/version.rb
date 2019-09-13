@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Bunup
   module Values
     # Parse and handle version strings

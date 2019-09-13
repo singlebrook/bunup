@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Bunup
   module Services
     # Validate that version of gem installed from a git source is valid

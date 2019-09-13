@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Disable coverage by default. When bin/rspec is run (manually or by guard), it
 # produces erroneous coverage information. bin/rake produces correct coverage,
 # so we'll opt in when using that command.

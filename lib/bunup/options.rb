@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'optionparser'
 require 'ostruct'
 
@@ -30,7 +32,7 @@ module Bunup
             list.each do |version_type|
               case version_type.strip
               when 'major'
-                then options[:assume_yes_for_major_version_update] = true
+                options[:assume_yes_for_major_version_update] = true
               when 'git' then options[:assume_yes_for_git_update] = true
               end
             end

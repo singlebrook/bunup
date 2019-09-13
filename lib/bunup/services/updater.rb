@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Bunup
   module Services
     # Use bundler to update the gem and the Gemfile

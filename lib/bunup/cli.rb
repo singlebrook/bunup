@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 module Bunup
   # Parse args, run services, handle output, and handle exits
   class CLI
-    COMMITING_MSG = 'Commiting Gemfile and Gemfile.lock changes'.freeze
+    COMMITING_MSG = 'Commiting Gemfile and Gemfile.lock changes'
     E_DIRTY_GEMFILE = 'Gemfile and/or Gemfile.lock has changes that would ' \
         'be overwritten. Please stash or commit your changes before running ' \
-        'bunup.'.freeze
+        'bunup.'
     GIT_REF_UPDATE_WARNING = 'WARNING: %<gem_name>s is installed from a git ' \
         'repo and is being updated from %<installed_version>s to ' \
         '%<newest_version>s. This update could include breaking changes. ' \
-        'Continue? [y/N] '.freeze
+        'Continue? [y/N] '
     MAJOR_VERSION_UPDATE_WARNING_FMT = 'WARNING: %<gem_name>s is being ' \
         'updated from %<installed_version>s to %<newest_version>s. This is ' \
         'a major version update with possible breaking changes. ' \
-        'Continue? [y/N] '.freeze
+        'Continue? [y/N] '
     UPDATING_MSG_FMT = '(%<remaining>s) Updating %<gem_name>s ' \
-      '%<installed_version>s -> %<newest_version>s'.freeze
+      '%<installed_version>s -> %<newest_version>s'
 
     def initialize(args)
       @options = ::Bunup::Options.parse!(args)

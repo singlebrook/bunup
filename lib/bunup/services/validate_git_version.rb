@@ -16,7 +16,7 @@ module Bunup
         return false if sha.nil?
 
         ::Gem::Version.correct?(version) &&
-          sha.match?(SHA_REGEX)
+          !sha.match(SHA_REGEX).nil?
       end
     end
   end

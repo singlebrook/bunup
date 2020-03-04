@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-Dir.glob(File.dirname(__FILE__) + '/bunup/**/*.rb').each { |file| require file }
+Dir.glob(File.dirname(__FILE__) + '/bunup/**/*.rb').sort.each do |file|
+  require file
+end
 
 # Out top-level namespace
 module Bunup; end

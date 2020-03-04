@@ -4,7 +4,7 @@ AllCops:
 Gemspec/RequiredRubyVersion:
   Enabled: false
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Layout/CaseIndentation:
@@ -26,7 +26,7 @@ Layout/EmptyLinesAroundAccessModifier:
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
 
 Layout/MultilineMethodCallIndentation:
@@ -70,6 +70,18 @@ Style/FormatStringToken:
 # time.
 Style/GuardClause:
   Enabled: false
+
+# New cop opt-in
+Style/HashEachMethods:
+  Enabled: true
+
+# New cop opt-in
+Style/HashTransformKeys:
+  Enabled: true
+
+# New cop opt-in
+Style/HashTransformValues:
+  Enabled: true
 
 # Too subtle to lint. Avoid the "modifier" (postfix) style except on extremely
 # short and simple lines.

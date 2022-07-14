@@ -4,5 +4,5 @@ Dir.glob(File.dirname(__FILE__) + '/bunup/**/*.rb').sort.each do |file|
   require file
 end
 
-# Out top-level namespace
+# Our top-level namespace
 module Bunup; end

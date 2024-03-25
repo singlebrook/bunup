@@ -19,9 +19,11 @@ module Bunup
 
     # Expected output format:
     #   "\ngem-name (newest 1.0.0, installed 2.0.0)\n"
-    def self.outdated(gem_names)
+    def self.outdated(gem_names, only_explicit = false)
+      args = %w[--parseable --strict]
+      args << '--only-explicit' if only_explicit
       stdout, stderr, status = Open3.capture3(
-        "bundler outdated #{gem_names.join(' ')} --parseable --strict"
+        "bundler outdated #{gem_names.join(' ')} #{args.join(' ')}"
       )
       validate_output(stdout, stderr, status)
       stdout.strip

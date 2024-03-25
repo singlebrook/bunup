@@ -52,7 +52,7 @@ module Bunup
 
     def bundle_outdated
       puts 'Checking for updates'
-      Bundler.outdated(bunup_all? ? [] : @args)
+      Bundler.outdated(bunup_all? ? [] : @args, @options[:only_explicit])
     rescue ::SystemExit => e
       handle_system_exit(e)
       ''

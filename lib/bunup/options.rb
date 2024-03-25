@@ -39,6 +39,10 @@ module Bunup
           end
         end
 
+        opts.on('--only-explicit') do
+          options[:only_explicit] = true
+        end
+
         opts.on('-h', '--help', 'Prints this help') do
           puts opts
           exit

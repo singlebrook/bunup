@@ -13,13 +13,13 @@ module Bunup
       (?<name>.*)\s
       \(newest\s(?<newest>.*),\s
       installed\s(?<installed>.*?)
-      (,\srequested.*)?
+      (?:,\srequested.*)?
       \)
     /x.freeze
 
     # Expected output format:
     #   "\ngem-name (newest 1.0.0, installed 2.0.0)\n"
-    def self.outdated(gem_names, only_explicit = false)
+    def self.outdated(gem_names, only_explicit: false)
       args = %w[--parseable --strict]
       args << '--only-explicit' if only_explicit
       stdout, stderr, status = Open3.capture3(
@@ -39,7 +39,7 @@ module Bunup
       unless status.to_i == 256
         raise ::SystemExit.new(
           status.to_i,
-          (stderr == '' ? stdout : stderr).chomp + "\n"
+          "#{(stderr == '' ? stdout : stderr).chomp}\n"
         )
       end
     end

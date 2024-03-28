@@ -17,7 +17,7 @@ module Bunup
         stderr = 'stderr'
         expect { described_class.validate_output(nil, stderr, status) }.
           to raise_error(::SystemExit).
-          with_message(stderr + "\n")
+          with_message("#{stderr}\n")
       end
 
       it 'does not exit if bundler error indicated that gem is out-of-date' do

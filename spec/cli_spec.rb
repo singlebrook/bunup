@@ -28,7 +28,7 @@ module Bunup
 
       expect(::Bunup::Bundler).
         to receive(:outdated).
-        with([gem_name], nil).
+        with([gem_name], only_explicit: nil).
         and_return(
           "#{gem_name} (newest #{newest_version}, " \
             "installed #{installed_version})"
@@ -106,7 +106,7 @@ module Bunup
           installed_version: Values::Version.new(installed_version),
           newest_version: Values::Version.new(newest_version)
         )
-        allow(STDIN).to receive(:gets).and_return('n')
+        allow($stdin).to receive(:gets).and_return('n')
 
         cli = described_class.new(['some_gem'])
         allow(cli).to receive(:build_gems).and_return([gem_stub])
@@ -127,7 +127,7 @@ module Bunup
           installed_version: Values::Version.new(installed_version),
           newest_version: Values::Version.new(newest_version)
         )
-        allow(STDIN).to receive(:gets).and_return('n')
+        allow($stdin).to receive(:gets).and_return('n')
 
         cli = described_class.new(['some_gem'])
         allow(cli).to receive(:build_gems).and_return([gem_stub])
@@ -154,7 +154,7 @@ module Bunup
           installed_version: Values::Version.new(installed_version),
           newest_version: Values::Version.new(newest_version)
         )
-        allow(STDIN).to receive(:gets).and_return('n')
+        allow($stdin).to receive(:gets).and_return('n')
 
         cli = described_class.new(%w[some_gem1 some_gem2 -y])
         allow(cli).to receive(:build_gems).and_return([gem_stub1, gem_stub2])
@@ -177,7 +177,7 @@ module Bunup
           installed_version: Values::Version.new(installed_version),
           newest_version: Values::Version.new(newest_version)
         )
-        allow(STDIN).to receive(:gets).and_return('n')
+        allow($stdin).to receive(:gets).and_return('n')
 
         cli = described_class.new(['some_gem'])
         allow(cli).to receive(:build_gems).and_return([gem_stub])
@@ -204,7 +204,7 @@ module Bunup
           installed_version: Values::Version.new(installed_version),
           newest_version: Values::Version.new(newest_version)
         )
-        allow(STDIN).to receive(:gets).and_return('n')
+        allow($stdin).to receive(:gets).and_return('n')
 
         cli = described_class.new(%w[some_gem1 some_gem2 -y])
         allow(cli).to receive(:build_gems).and_return([gem_stub1, gem_stub2])

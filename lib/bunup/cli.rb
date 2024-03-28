@@ -52,7 +52,7 @@ module Bunup
 
     def bundle_outdated
       puts 'Checking for updates'
-      Bundler.outdated(bunup_all? ? [] : @args, @options[:only_explicit])
+      Bundler.outdated(bunup_all? ? [] : @args, only_explicit: @options[:only_explicit])
     rescue ::SystemExit => e
       handle_system_exit(e)
       ''
@@ -75,7 +75,7 @@ module Bunup
       msg = []
       msg << 'ERROR:' unless exception.success?
       msg << exception.message
-      puts msg.join(' ') + "\n"
+      puts "#{msg.join(' ')}\n"
       raise exception unless bunup_many?
     end
 
@@ -98,7 +98,7 @@ module Bunup
       if @options[:assume_yes_for_git_update]
         print "assuming yes\n"
       else
-        unless STDIN.gets.chomp.casecmp('y').zero?
+        unless $stdin.gets.chomp.casecmp('y').zero?
           raise ::SystemExit.new(true, 'No update performed')
         end
       end
@@ -117,7 +117,7 @@ module Bunup
       if @options[:assume_yes_for_major_version_update]
         print "assuming yes\n"
       else
-        unless STDIN.gets.chomp.casecmp('y').zero?
+        unless $stdin.gets.chomp.casecmp('y').zero?
           raise ::SystemExit.new(true, 'No update performed')
         end
       end

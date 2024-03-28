@@ -28,7 +28,7 @@ module Bunup
 
       expect(::Bunup::Bundler).
         to receive(:outdated).
-        with([gem_name]).
+        with([gem_name], nil).
         and_return(
           "#{gem_name} (newest #{newest_version}, " \
             "installed #{installed_version})"

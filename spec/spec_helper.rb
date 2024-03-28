@@ -11,7 +11,6 @@ if ENV['COVERAGE'] == '1'
   end
 end
 
-require 'byebug'
 require 'bunup'
 require 'support/helpers'
 

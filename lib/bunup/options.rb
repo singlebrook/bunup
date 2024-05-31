@@ -7,7 +7,6 @@ module Bunup
   # Handle command-line switches
   class Options < ::OpenStruct
     def self.parse!(args)
-      args = ['--all'] if args.empty?
       options = new
       opt_parser = ::OptionParser.new do |opts|
         opts.banner = 'Usage: bunup [options] | <gem_name> [<gem_name>...]'
@@ -49,6 +48,9 @@ module Bunup
         end
       end
       opt_parser.parse!(args)
+
+      options.all = true if args.empty?
+
       options
     rescue OptionParser::InvalidOption => e
       puts e

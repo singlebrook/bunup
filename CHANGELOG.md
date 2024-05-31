@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Fix bug where all gems aren't updated when any flag is used
+
 ## [0.3.0](https://github.com/singlebrook/bunup/releases/tag/v0.3.0)
 
 ### Added

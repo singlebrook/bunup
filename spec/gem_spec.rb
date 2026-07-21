@@ -12,7 +12,7 @@ module Bunup
           installed_version: nil,
           newest_version: nil
         }
-        expect { described_class.new(attributes) }.
+        expect { described_class.new(**attributes) }.
           to raise_error("Invalid gem name: #{invalid_gem_name}")
       end
     end
@@ -24,7 +24,7 @@ module Bunup
         installed_version: invalid_version,
         newest_version: '1.0.0'
       }
-      expect { described_class.new(attributes) }.
+      expect { described_class.new(**attributes) }.
         to raise_error(::SystemExit).
         with_message("Invalid version for gem_name: #{invalid_version}")
     end
@@ -36,7 +36,7 @@ module Bunup
         installed_version: '1.0.0',
         newest_version: invalid_version
       }
-      expect { described_class.new(attributes) }.
+      expect { described_class.new(**attributes) }.
         to raise_error(::SystemExit).
         with_message("Invalid version for gem_name: #{invalid_version}")
     end
